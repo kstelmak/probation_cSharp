@@ -24,15 +24,25 @@ namespace Task1
             };
             int n1;
             int n2;
-            try
-            {
-                Console.Write("enter first num: ");
-                n1 = numbers[Console.ReadLine()];
-                Console.Write("enter second num: ");
-                n2 = numbers[Console.ReadLine()];
 
+            Console.Write("enter first num: ");
+            if (numbers.TryGetValue(Console.ReadLine(), out int num1))
+            {
+                n1 = num1;
             }
-            catch (System.Collections.Generic.KeyNotFoundException)
+            else
+            {
+                Console.Write("incorrect input");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.Write("enter second num: ");
+            if (numbers.TryGetValue(Console.ReadLine(), out int num2))
+            {
+                n2 = num2;
+            }
+            else
             {
                 Console.Write("incorrect input");
                 Console.ReadKey();
