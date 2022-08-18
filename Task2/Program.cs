@@ -6,21 +6,37 @@ using System.Threading.Tasks;
 
 namespace Task2
 {
-    class MyClass
+    public class DateTimeWrapper
     {
-        public DateTime myDateTime { get; set; }
-        public bool IsTimeInFuture = false;
+        public DateTime storedDateTime { get; }
+        public bool IsTimeInFuture { get; } = false;
         public int SumOfDigits = 0;
-        public MyClass(DateTime dt)
+
+        public DateTimeWrapper(DateTime dateTime)
         {
-            myDateTime = dt;
-            if (DateTime.Now < dt)
+            storedDateTime = dateTime;
+            if (DateTime.Now < dateTime)
             {
                 IsTimeInFuture = true;
             }
-            SumOfDigits = myDateTime.Year + myDateTime.Month + myDateTime.Day + myDateTime.Hour + myDateTime.Minute + myDateTime.Second;
+            calculateSumOfDigits();
         }
-        public bool Compare(MyClass obj)
+        public void calculateSumOfDigits()
+        {
+            SumOfDigits = calculateSumOfDigitsInNumber(storedDateTime.Year) + calculateSumOfDigitsInNumber(storedDateTime.Month) + calculateSumOfDigitsInNumber(storedDateTime.Day) + calculateSumOfDigitsInNumber(storedDateTime.Hour) + calculateSumOfDigitsInNumber(storedDateTime.Minute) + calculateSumOfDigitsInNumber(storedDateTime.Second);
+        }
+        public int calculateSumOfDigitsInNumber(int num)
+        {
+            int sum = 0;
+            while (num >= 10)
+            {
+                sum += (num % 10);
+                num /= 10;
+            }
+            sum += num;
+            return sum;
+        }
+        public bool Compare(DateTimeWrapper obj)
         {
             if (this.SumOfDigits > obj.SumOfDigits)
             {
@@ -28,10 +44,14 @@ namespace Task2
             }
             return false;
         }
-        public void getInfo()
+        
+    }
+    class Program
+    {
+        public static void getInfo(DateTimeWrapper obj)
         {
-            Console.WriteLine($"{this.myDateTime.Year} {this.myDateTime.Month} {this.myDateTime.Day} {this.myDateTime.Hour} {this.myDateTime.Minute} {this.myDateTime.Second}");
-            if (this.IsTimeInFuture)
+            Console.WriteLine($"{obj.storedDateTime.Year} {obj.storedDateTime.Month} {obj.storedDateTime.Day} {obj.storedDateTime.Hour} {obj.storedDateTime.Minute} {obj.storedDateTime.Second}");
+            if (obj.IsTimeInFuture)
             {
                 Console.WriteLine("Is In Future");
             }
@@ -39,18 +59,15 @@ namespace Task2
             {
                 Console.WriteLine("Isn't In Future");
             }
-            Console.WriteLine($"Sum of digits = {this.SumOfDigits}");
+            Console.WriteLine($"Sum of digits = {obj.SumOfDigits}");
         }
-    }
-    class Program
-    {
         static void Main(string[] args)
         {
-            MyClass obj1 = new MyClass(new DateTime(2022, 07, 14, 15, 58, 10));
-            MyClass obj2 = new MyClass(new DateTime(2033, 03, 03, 03, 33, 33));
+            DateTimeWrapper obj1 = new DateTimeWrapper(new DateTime(2022, 07, 14, 15, 58, 10));
+            DateTimeWrapper obj2 = new DateTimeWrapper(new DateTime(2033, 03, 03, 03, 33, 33));
 
-            obj1.getInfo();
-            obj2.getInfo();
+            getInfo(obj1);
+            getInfo(obj2);
                         
             if (obj1.Compare(obj2))
             {
